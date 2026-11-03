@@ -1,40 +1,12 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập - DET Practice</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f4f6f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .auth-card { background: #ffffff; padding: 32px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); width: 100%; max-width: 400px; box-sizing: border-box; }
-        h1 { margin-top: 0; font-size: 24px; color: #1e293b; text-align: center; }
-        .form-group { margin-bottom: 16px; }
-        label { display: block; font-size: 14px; font-weight: 600; color: #475569; margin-bottom: 6px; }
-        input[type="email"], input[type="password"] { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
-        input[type="email"]:focus, input[type="password"]:focus { border-color: #2cb67d; outline: none; }
-        .btn-primary { width: 100%; background: #2cb67d; color: white; border: none; padding: 10px; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-        .btn-primary:hover { background: #249667; }
-        .btn-google { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: #ffffff; color: #334155; border: 1px solid #cbd5e1; padding: 10px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; box-sizing: border-box; margin-top: 12px; }
-        .btn-google:hover { background: #f8fafc; }
-        .error-message { color: #dc2626; font-size: 13px; margin-top: 4px; }
-        .status-message { background: #dcfce7; color: #166534; padding: 10px; border-radius: 6px; font-size: 14px; margin-bottom: 16px; text-align: center; }
-        .alert-error { background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 6px; font-size: 14px; margin-bottom: 16px; }
-        .auth-links { margin-top: 20px; font-size: 13px; text-align: center; color: #64748b; }
-        .auth-links a { color: #2cb67d; text-decoration: none; font-weight: 600; }
-        .auth-links a:hover { text-decoration: underline; }
-        .divider { display: flex; align-items: center; text-align: center; margin: 16px 0; color: #94a3b8; font-size: 12px; }
-        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #e2e8f0; }
-        .divider:not(:empty)::before { margin-right: .5em; }
-        .divider:not(:empty)::after { margin-left: .5em; }
-    </style>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Đăng nhập - DET Practice')
+@section('body_class', 'auth-body')
+
+@section('content')
     <div class="auth-card">
         <h1>Đăng nhập DET Practice</h1>
-
-        @if (session('status'))
-            <div class="status-message">{{ session('status') }}</div>
-        @endif
+        <p class="subtitle">Chào mừng bạn ! Đăng nhập để tiếp tục luyện tập.</p>
 
         @if ($errors->has('email'))
             <div class="alert-error">{{ $errors->first('email') }}</div>
@@ -42,24 +14,38 @@
 
         <form method="POST" action="{{ route('login.submit') }}">
             @csrf
+
+            @php
+                $savedEmail = old('email', $rememberedEmail ?? Cookie::get('remember_email'));
+                $hasRemember = old('remember') || !empty($rememberedEmail) || Cookie::has('remember_email');
+            @endphp
+
             <div class="form-group">
                 <label for="email">Địa chỉ Email</label>
-                <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="example@domain.com" required autofocus>
+                <input type="email" id="email" name="email" value="{{ $savedEmail }}" placeholder="example@domain.com" required {{ empty($savedEmail) ? 'autofocus' : '' }}>
             </div>
 
             <div class="form-group">
                 <label for="matkhau">Mật khẩu</label>
-                <input type="password" id="matkhau" name="matkhau" placeholder="••••••••" required>
+                <div class="password-field-wrapper">
+                    <input type="password" id="matkhau" name="matkhau" placeholder="Nhập mật khẩu" required {{ !empty($savedEmail) ? 'autofocus' : '' }}>
+                    <button type="button" class="btn-toggle-eye" onclick="togglePasswordVisibility('matkhau', this)" title="Hiện mật khẩu" tabindex="-1">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
                 @error('matkhau')
                     <div class="error-message">{{ $message }}</div>
                 @enderror
             </div>
 
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 13px;">
-                <label style="margin: 0; font-weight: normal; cursor: pointer;">
-                    <input type="checkbox" name="remember"> Ghi nhớ đăng nhập
+            <div class="checkbox-row">
+                <label>
+                    <input type="checkbox" name="remember" value="1" {{ $hasRemember ? 'checked' : '' }}> Ghi nhớ đăng nhập
                 </label>
-                <a href="{{ route('password.request') }}" style="color: #2cb67d; text-decoration: none;">Quên mật khẩu?</a>
+                <a href="{{ route('password.request') }}">Quên mật khẩu?</a>
             </div>
 
             <button type="submit" class="btn-primary">Đăng nhập</button>
@@ -68,12 +54,17 @@
         <div class="divider">HOẶC</div>
 
         <a href="{{ route('auth.google') }}" class="btn-google">
-            <span>Tiếp tục với Google</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            Tiếp tục với Google
         </a>
 
         <div class="auth-links">
             Chưa có tài khoản? <a href="{{ route('register') }}">Đăng ký ngay</a>
         </div>
     </div>
-</body>
-</html>
+@endsection

@@ -22,7 +22,7 @@
         align-items: center;
         gap: 8px;
         background: #e6f9f0;
-        color: #00874e;
+        color: var(--bento-orange-dark);
         border: 1px solid #b2ecd1;
         padding: 6px 16px;
         border-radius: 20px;
@@ -43,7 +43,7 @@
     }
 
     .hero-title span {
-        color: #00b86b;
+        color: var(--bento-orange);
     }
 
     .hero-subtitle {
@@ -67,7 +67,7 @@
         grid-template-columns: repeat(4, 1fr);
         gap: 16px;
         background: #ffffff;
-        border: 1px solid #e2e8f0;
+        border: 1px solid var(--bento-line);
         border-radius: 14px;
         padding: 18px 24px;
         max-width: 820px;
@@ -82,12 +82,12 @@
     .stat-value {
         font-size: 24px;
         font-weight: 800;
-        color: #00b86b;
+        color: var(--bento-orange);
     }
 
     .stat-label {
         font-size: 12px;
-        color: #64748b;
+        color: var(--bento-muted);
         margin-top: 2px;
         font-weight: 600;
     }
@@ -101,12 +101,12 @@
     .section-header h2 {
         font-size: 26px;
         font-weight: 800;
-        color: #1e293b;
+        color: var(--bento-heading);
     }
 
     .section-header p {
         font-size: 15px;
-        color: #64748b;
+        color: var(--bento-muted);
         margin-top: 6px;
         max-width: 700px;
         margin-left: auto;
@@ -116,7 +116,7 @@
     /* --- ABOUT DET EXAM SECTION --- */
     .det-intro-card {
         background: #ffffff;
-        border: 1px solid #e2e8f0;
+        border: 1px solid var(--bento-line);
         border-radius: 16px;
         padding: 36px 32px;
         margin-bottom: 48px;
@@ -133,7 +133,7 @@
     .det-intro-text h3 {
         font-size: 22px;
         font-weight: 800;
-        color: #1e293b;
+        color: var(--bento-heading);
         margin-bottom: 12px;
     }
 
@@ -151,8 +151,8 @@
     }
 
     .det-highlight-box {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
+        background: var(--bento-subtle);
+        border: 1px solid var(--bento-line);
         border-radius: 12px;
         padding: 16px;
     }
@@ -160,13 +160,13 @@
     .det-highlight-box strong {
         display: block;
         font-size: 15px;
-        color: #00b86b;
+        color: var(--bento-orange);
         margin-bottom: 4px;
     }
 
     .det-highlight-box span {
         font-size: 13px;
-        color: #64748b;
+        color: var(--bento-muted);
         line-height: 1.5;
     }
 
@@ -180,7 +180,7 @@
 
     .feature-card {
         background: #ffffff;
-        border: 1px solid #e2e8f0;
+        border: 1px solid var(--bento-line);
         border-radius: 16px;
         padding: 28px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
@@ -191,7 +191,7 @@
     }
 
     .feature-card:hover {
-        border-color: #00b86b;
+        border-color: var(--bento-orange);
         box-shadow: 0 8px 20px rgba(0, 184, 107, 0.08);
     }
 
@@ -210,13 +210,13 @@
     .feature-title {
         font-size: 19px;
         font-weight: 800;
-        color: #1e293b;
+        color: var(--bento-heading);
         margin-bottom: 8px;
     }
 
     .feature-desc {
         font-size: 14px;
-        color: #64748b;
+        color: var(--bento-muted);
         line-height: 1.65;
         margin-bottom: 16px;
     }
@@ -239,7 +239,7 @@
     /* --- BOTTOM CTA --- */
     .cta-banner {
         background: #ffffff;
-        border: 2px solid #00b86b;
+        border: 2px solid var(--bento-orange);
         border-radius: 16px;
         padding: 36px 28px;
         text-align: center;
@@ -249,13 +249,13 @@
     .cta-banner h3 {
         font-size: 24px;
         font-weight: 800;
-        color: #1e293b;
+        color: var(--bento-heading);
         margin-bottom: 8px;
     }
 
     .cta-banner p {
         font-size: 15px;
-        color: #64748b;
+        color: var(--bento-muted);
         margin-bottom: 20px;
     }
 
@@ -281,32 +281,45 @@
     <!-- 1. HERO BANNER GIỚI THIỆU & NÚT BẮT ĐẦU NGAY DẪN ĐẾN ĐĂNG KÝ -->
     <section class="hero-banner">
         <div class="hero-badge">
-            ✨ Nền tảng luyện thi Duolingo English Test trực tuyến
+            Luyện thi Duolingo English Test
         </div>
 
-        <h1 class="hero-title">
-            Chinh Phục Điểm Số Mục Tiêu Cùng <span>DET Practice</span>
-        </h1>
+        <div class="hero-heading-row">
+            <h1 class="hero-title">
+                Luyện tập mỗi ngày.<br>
+                <span>Tiến gần mục tiêu.</span>
+            </h1>
+
+            <img
+                class="hero-fox"
+                src="{{ asset('images/fox.png') }}"
+                alt="Linh vật cáo AmberDET"
+                width="280"
+                height="280"
+                fetchpriority="high"
+            >
+        </div>
 
         <p class="hero-subtitle">
-            Hệ thống ôn luyện và mô phỏng bài thi <strong>Duolingo English Test (DET)</strong> chuẩn quốc tế. Tích hợp ngân hàng câu hỏi 4 kỹ năng, thi thử thích ứng (Adaptive Mock Test), chấm điểm Writing & Speaking bằng AI và cấp chứng chỉ thi thử trực tuyến.
+            Rèn luyện bốn kỹ năng, làm bài thi thử và xem lại kết quả
+            để biết mình cần cải thiện điều gì.
         </p>
 
         <div class="hero-cta">
             @auth
                 <a href="{{ route('practice.index') }}" class="btn btn-primary" style="padding: 13px 32px; font-size: 16px;">
-                    Bắt đầu luyện tập ngay →
+                    Bắt đầu luyện tập ngay 
                 </a>
                 <a href="{{ url('/mock-test') }}" class="btn btn-outline" style="padding: 13px 26px; font-size: 15px;">
-                    Vào phòng Thi thử (Mock Test)
+                    Làm bài thi thử
                 </a>
             @else
                 <!-- Đúng ngữ cảnh Khách: Nút "Bắt đầu ngay" dẫn đến trang Đăng ký -->
                 <a href="{{ route('register') }}" class="btn btn-primary" style="padding: 13px 32px; font-size: 16px;">
-                    Bắt đầu ngay →
+                    Tạo tài khoản
                 </a>
                 <a href="{{ route('login') }}" class="btn btn-outline" style="padding: 13px 26px; font-size: 15px;">
-                    Đăng nhập tài khoản
+                    Đăng nhập
                 </a>
             @endauth
         </div>
@@ -452,13 +465,13 @@
             <h3>Sẵn sàng chinh phục mục tiêu điểm DET của bạn?</h3>
             <p>Hãy chọn dạng bài luyện tập hoặc làm bài thi thử để đánh giá năng lực ngay hôm nay.</p>
             <a href="{{ route('practice.index') }}" class="btn btn-primary" style="padding: 12px 30px; font-size: 15px;">
-                Vào khu vực Luyện tập →
+                Vào khu vực Luyện tập 
             </a>
         @else
             <h3>Bắt đầu lộ trình luyện thi Duolingo English Test ngay hôm nay</h3>
             <p>Tạo tài khoản miễn phí chỉ trong 30 giây để mở khóa toàn bộ tính năng Luyện tập, Mock Test, AI chấm bài và Chứng chỉ thi thử.</p>
             <a href="{{ route('register') }}" class="btn btn-primary" style="padding: 12px 32px; font-size: 15px;">
-                Bắt đầu ngay →
+                Bắt đầu ngay 
             </a>
         @endauth
     </section>

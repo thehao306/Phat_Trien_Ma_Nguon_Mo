@@ -1,24 +1,28 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookmarkController;
-use App\Http\Controllers\Practice\PracticeController;
 use App\Http\Controllers\MockTest\MockTestController;
+use App\Http\Controllers\MockTest\MockTestDashboardController;
+use App\Http\Controllers\MockTest\MockTestHistoryController;
 use App\Http\Controllers\MockTest\MockTestResultController;
+use App\Http\Controllers\Practice\PracticeAIController;
+use App\Http\Controllers\Practice\PracticeController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Tutor\TutorController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Certificate\CertificateController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes - DET Practice System
-| Phân hệ Tài khoản (TK), Luyện tập (LT) [TV1] & Thi thử Mock Test [TV2]
+| Phân hệ Tài khoản (TK), Luyện tập (LT) [TV1], AI [TV3] & Mock Test [TV2]
 |--------------------------------------------------------------------------
 */
 
@@ -73,15 +77,30 @@ Route::middleware('auth')->prefix('practice')->name('practice.')->group(function
     // LT01: Danh sách các dạng bài luyện tập DET nhóm theo 4 kỹ năng
     Route::get('/', [PracticeController::class, 'index'])->name('index');
 
-    // LT02 & LT09: Chọn câu luyện tập có bộ lọc dạng bài, chủ đề, độ khó, từ khóa tìm kiếm
+    // LT02 & LT09: Chọn bài luyện tập theo Dạng bài & Cấp độ độ khó (gộp theo tiêu đề kỹ năng)
     Route::get('/select/{loai_id?}', [PracticeController::class, 'select'])->name('select');
+
+    // LUYỆN TẬP LIÊN TIẾP THEO DẠNG BÀI & ĐỘ KHÓ (Tự do, không đếm ngược thời gian, hiện kết quả & giải thích tức thì)
+    Route::get('/session', [PracticeController::class, 'session'])->name('session');
+    Route::post('/session/submit', [PracticeController::class, 'submitSession'])->name('session.submit');
+    Route::get('/session/result', [PracticeController::class, 'sessionResult'])->name('session.result');
+
+    // Chấm điểm & kiểm tra bài nói Speaking bằng AI qua nút voice ghi âm
+    Route::post('/speaking/evaluate', [PracticeController::class, 'evaluateSpeaking'])->name('speaking.evaluate');
+
+    // Tương thích ngược với liên kết mã đề cũ
+    Route::get('/set/{code}', [PracticeController::class, 'showSet'])->name('set.show');
+    Route::post('/set/{code}/submit', [PracticeController::class, 'submitSet'])->name('set.submit');
+    Route::get('/set/{code}/result', [PracticeController::class, 'resultSet'])->name('set.result');
 
     // LT08 & LT09: Lịch sử luyện tập và tìm kiếm lịch sử
     Route::get('/history', [PracticeController::class, 'history'])->name('history');
 
-    // LT07: Quản lý câu hỏi yếu đã đánh dấu (Bookmarks)
+    // LT07: Quản lý câu hỏi yếu đã đánh dấu (Bookmarks) & Dạng bài quan tâm
     Route::get('/bookmarks', [BookmarkController::class, 'index'])->name('bookmarks');
     Route::post('/question/{cauhoi_id}/bookmark', [BookmarkController::class, 'toggle'])->name('bookmark.toggle');
+    Route::post('/type/{loai_id}/bookmark', [BookmarkController::class, 'toggleType'])->name('bookmark.type.toggle');
+    Route::get('/bookmarks/practice', [BookmarkController::class, 'practiceSaved'])->name('bookmarks.practice');
 
     // LT03: Trang làm bài luyện tập
     Route::get('/question/{id}', [PracticeController::class, 'show'])->name('show');
@@ -94,6 +113,22 @@ Route::middleware('auth')->prefix('practice')->name('practice.')->group(function
 
     // LT06: Chuyển bài Writing/Speaking sang cho AI chấm
     Route::post('/result/{id}/ai', [PracticeController::class, 'submitAI'])->name('ai');
+
+    // ===================================================
+    // PRACTICE AI - Luyện tập chấm điểm Writing/Speaking (TV3)
+    // ===================================================
+    Route::prefix('ai')->name('ai.')->group(function () {
+        Route::get('/question/{id}', [PracticeAIController::class, 'showQuestion'])
+            ->whereNumber('id')->name('question');
+        Route::post('/submit/{id}', [PracticeAIController::class, 'submit'])
+            ->whereNumber('id')->name('submit');
+        Route::get('/status/{id}', [PracticeAIController::class, 'status'])
+            ->whereNumber('id')->name('status');
+        Route::get('/audio/{id}', [PracticeAIController::class, 'audio'])
+            ->whereNumber('id')->name('audio');
+        Route::post('/retry/{id}', [PracticeAIController::class, 'retry'])
+            ->whereNumber('id')->name('retry');
+    });
 });
 
 // =========================================================================
@@ -108,6 +143,21 @@ Route::get('/mock-test', [MockTestController::class, 'index'])
     ->name('mock-test.index');
 
 Route::middleware('auth')->group(function () {
+    // MT07 - Lịch sử thi của người dùng
+    Route::get('/mock-test/history', [MockTestHistoryController::class, 'index'])
+        ->name('mock-test.history');
+
+    // MT09 - Cấp và xem chứng chỉ
+    Route::post('/mock-test/{id}/certificate', [CertificateController::class, 'issue'])
+        ->whereNumber('id')->name('certificate.issue');
+
+    Route::get('/certificate/{id}', [CertificateController::class, 'show'])
+        ->whereNumber('id')->name('certificate.show');
+
+    // DB01-DB05 - Tiến độ và thống kê học tập
+    Route::get('/learning-dashboard', [MockTestDashboardController::class, 'index'])
+        ->name('learning.dashboard');
+
     // MT01 - Bắt đầu hoặc tiếp tục bài thi
     Route::post('/mock-test/start', [MockTestController::class, 'start'])
         ->name('mock-test.start');
@@ -135,16 +185,31 @@ Route::middleware('auth')->group(function () {
     // MT08 / MT04 - Bỏ dở hoặc xử lý hết giờ
     Route::post('/mock-test/{id}/abandon', [MockTestController::class, 'abandon'])
         ->whereNumber('id')->name('mock-test.abandon');
+
+    // ==========================================
+    // AI TUTOR - Trợ lý học tập thông minh (TV3)
+    // ==========================================
+    Route::prefix('tutor')->name('tutor.')->group(function () {
+        Route::get('/', [TutorController::class, 'index'])->name('index');
+        Route::get('/grammar', [TutorController::class, 'showGrammar'])->name('grammar');
+        Route::post('/grammar', [TutorController::class, 'processGrammar'])->name('grammar.process');
+        Route::get('/translate', [TutorController::class, 'showTranslate'])->name('translate');
+        Route::post('/translate', [TutorController::class, 'processTranslate'])->name('translate.process');
+        Route::get('/rewrite', [TutorController::class, 'showRewrite'])->name('rewrite');
+        Route::post('/rewrite', [TutorController::class, 'processRewrite'])->name('rewrite.process');
+        Route::get('/history', [TutorController::class, 'history'])->name('history');
+    });
 });
 
 // Phục vụ file tĩnh trong thư mục storage trên môi trường Windows / XAMPP
 Route::get('/storage/{path}', function ($path) {
-    $filePath = public_path('storage/' . $path);
-    if (!file_exists($filePath)) {
-        $filePath = storage_path('app/public/' . $path);
+    $filePath = public_path('storage/'.$path);
+    if (! file_exists($filePath)) {
+        $filePath = storage_path('app/public/'.$path);
     }
-    if (!file_exists($filePath)) {
+    if (! file_exists($filePath)) {
         abort(404);
     }
+
     return response()->file($filePath);
 })->where('path', '.*')->name('storage.file');

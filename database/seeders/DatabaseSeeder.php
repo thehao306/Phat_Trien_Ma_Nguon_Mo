@@ -9,12 +9,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            NguoidungSeeder::class,
+            // Tạo tài khoản quản trị trước để admin luôn là người dùng đầu tiên (id nhỏ nhất).
             AdminNguoidungSeeder::class,
+            NguoidungSeeder::class,
             AdminCatalogSeeder::class,
             MockTestDataSeeder::class,
             FullMockTestSeeder::class,
             OperationalQuestionBankSeeder::class,
+            ExtendedQuestionBankSeeder::class,
             LuyentapSeeder::class,
             DanhdauSeeder::class,
         ]);

@@ -4,7 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Quản trị') - DET Practice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/bento.css') }}?v={{ filemtime(public_path('css/bento.css')) }}">
+    <link rel="stylesheet" href="{{ asset('css/bento-pages.css') }}?v={{ filemtime(public_path('css/bento-pages.css')) }}">
 </head>
 <body class="admin-body">
     <div class="admin-shell">
@@ -45,11 +49,11 @@
                     @include('admin.partials.icon', ['icon' => 'categories'])
                     <span>Chủ đề</span>
                 </a>
-                <span class="admin-nav__item is-disabled" title="Sẽ làm ở bước tiếp theo">
+                <a class="admin-nav__item {{ request()->routeIs('admin.exams.*') ? 'is-active' : '' }}"
+                   href="{{ route('admin.exams.index') }}">
                     @include('admin.partials.icon', ['icon' => 'exam'])
                     <span>Đề thi</span>
-                    <span class="admin-nav__soon">Sắp có</span>
-                </span>
+                </a>
 
                 <p class="admin-nav__label">Hệ thống</p>
                 <a class="admin-nav__item {{ request()->routeIs('admin.users.*') ? 'is-active' : '' }}"

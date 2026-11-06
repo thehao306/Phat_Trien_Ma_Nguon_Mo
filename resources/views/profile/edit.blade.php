@@ -44,7 +44,7 @@
 
                 <div class="profile-meta-tags">
                     <span class="profile-meta-tag">
-                        📧 {{ $user->email }}
+                         {{ $user->email }}
                         @if($user->hasVerifiedEmail())
                             <span class="badge badge-speaking" style="padding: 2px 8px; font-size: 11px;">✓ Đã xác minh</span>
                         @else
@@ -52,18 +52,15 @@
                         @endif
                     </span>
                     <span class="profile-meta-tag">
-                        📅 Tham gia: {{ $user->ngaytao ? \Carbon\Carbon::parse($user->ngaytao)->format('d/m/Y') : 'Mới tham gia' }}
+                         Tham gia: {{ $user->ngaytao ? \Carbon\Carbon::parse($user->ngaytao)->format('d/m/Y') : 'Mới tham gia' }}
                     </span>
                 </div>
             </div>
 
             <div class="profile-hero-actions">
                 <button type="button" id="btn-switch-edit" class="btn btn-primary" onclick="toggleEditMode(true)">
-                    ✏️ Sửa đổi thông tin
-                </button>
-                <button type="button" class="btn btn-outline" onclick="toggleEditMode(true, true)">
-                    🔒 Đổi mật khẩu
-                </button>
+                    Sửa đổi thông tin
+                </button>   
             </div>
         </div>
     </div>
@@ -72,9 +69,6 @@
     <div class="profile-stats-row">
         <!-- Mục tiêu điểm DET -->
         <div class="profile-stat-box">
-            <div class="profile-stat-icon" style="background: #e0f2fe; color: #0284c7;">
-                🎯
-            </div>
             <div class="profile-stat-info" style="flex: 1;">
                 <div class="stat-title">Mục tiêu điểm DET</div>
                 <div class="stat-value">
@@ -93,9 +87,6 @@
 
         <!-- Trạng thái tài khoản -->
         <div class="profile-stat-box">
-            <div class="profile-stat-icon" style="background: #dcfce7; color: #16a34a;">
-                🛡️
-            </div>
             <div class="profile-stat-info">
                 <div class="stat-title">Trạng thái bảo mật</div>
                 <div class="stat-value" style="font-size: 16px;">
@@ -106,9 +97,6 @@
 
         <!-- Phương thức xác thực -->
         <div class="profile-stat-box">
-            <div class="profile-stat-icon" style="background: #fef3c7; color: #d97706;">
-                🔑
-            </div>
             <div class="profile-stat-info">
                 <div class="stat-title">Đăng nhập qua</div>
                 <div class="stat-value" style="font-size: 16px;">
@@ -129,7 +117,7 @@
         <div class="profile-card-header">
             <div>
                 <h2 class="card-title" style="margin-bottom: 2px;">Thông tin hồ sơ cá nhân</h2>
-                <p style="color: #64748b; font-size: 13px; margin: 0;">Xem thông tin tài khoản của bạn trên nền tảng DET Practice.</p>
+                <p style="color: var(--bento-muted); font-size: 13px; margin: 0;">Xem thông tin tài khoản của bạn trên nền tảng DET Practice.</p>
             </div>
         </div>
 
@@ -147,7 +135,7 @@
                         <span class="badge badge-speaking" style="font-size: 11px;">✓ Đã xác minh</span>
                     @else
                         <a href="{{ route('verification.notice') }}" class="badge badge-listening" style="font-size: 11px; text-decoration: none;">
-                            Xác minh ngay →
+                            Xác minh ngay 
                         </a>
                     @endif
                 </div>
@@ -157,8 +145,8 @@
                 <div class="profile-field-label">Mục tiêu điểm Duolingo English Test (DET)</div>
                 <div class="profile-field-val">
                     @if($user->muctieu)
-                        <span style="color: #00b86b; font-weight: 800; font-size: 17px;">{{ $user->muctieu }}</span>
-                        <span style="color: #64748b; font-weight: 600; font-size: 13px;">/ 160 điểm</span>
+                        <span style="color: var(--bento-orange); font-weight: 800; font-size: 17px;">{{ $user->muctieu }}</span>
+                        <span style="color: var(--bento-muted); font-weight: 600; font-size: 13px;">/ 160 điểm</span>
                     @else
                         <span style="color: #94a3b8; font-style: italic;">Chưa thiết lập mục tiêu</span>
                     @endif
@@ -202,11 +190,8 @@
         <div class="profile-card-header">
             <div>
                 <h2 class="card-title" style="margin-bottom: 2px;">Chỉnh sửa thông tin hồ sơ & Đổi mật khẩu</h2>
-                <p style="color: #64748b; font-size: 13px; margin: 0;">Cập nhật ảnh đại diện, họ tên, mục tiêu điểm thi và đổi mật khẩu tài khoản.</p>
+                <p style="color: var(--bento-muted); font-size: 13px; margin: 0;">Cập nhật ảnh đại diện, họ tên, mục tiêu điểm thi và đổi mật khẩu tài khoản.</p>
             </div>
-            <button type="button" class="btn btn-outline btn-sm" onclick="toggleEditMode(false)">
-                ✕ Hủy bỏ
-            </button>
         </div>
 
         <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" id="profile-edit-form">
@@ -221,7 +206,7 @@
                 </div>
                 
                 <div style="flex: 1;">
-                    <label for="anh" style="font-weight: 700; color: #1e293b; margin-bottom: 6px; display: block;">
+                    <label for="anh" style="font-weight: 700; color: var(--bento-heading); margin-bottom: 6px; display: block;">
                         Ảnh đại diện
                     </label>
 
@@ -229,17 +214,17 @@
                         <input type="file" id="anh" name="anh" accept="image/jpeg,image/png,image/jpg,image/webp,image/svg+xml" class="form-control" style="font-size: 13px; max-width: 340px;" onchange="previewSelectedAvatar(this)">
                         
                         <button type="button" id="btn-remove-avatar" class="btn btn-sm" style="background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; padding: 7px 14px; font-weight: 700;" onclick="triggerRemoveAvatar()">
-                            🗑️ Gỡ ảnh đại diện
+                         Gỡ ảnh đại diện
                         </button>
                     </div>
 
                     <!-- Thông báo khi bấm Gỡ ảnh -->
                     <div id="remove-avatar-notice" style="display: none; margin-top: 8px; color: #b91c1c; font-size: 12px; font-weight: 600; background: #fef2f2; padding: 6px 12px; border-radius: 6px; border: 1px solid #fecaca;">
-                        ⚠️ Đã chọn gỡ ảnh đại diện về mặc định. Nhấn nút <strong>"Lưu thay đổi hồ sơ"</strong> bên dưới để hoàn tất.
+                        Đã chọn gỡ ảnh đại diện về mặc định. Nhấn nút <strong>"Lưu thay đổi hồ sơ"</strong> bên dưới để hoàn tất.
                         <button type="button" onclick="cancelRemoveAvatar()" style="background: none; border: none; color: #0284c7; text-decoration: underline; cursor: pointer; margin-left: 6px; font-size: 12px; font-weight: 700;">Hoàn tác</button>
                     </div>
 
-                    <small style="color: #64748b; font-size: 12px; margin-top: 6px; display: block;">Định dạng: JPG, PNG, WEBP. Tối đa 2MB.</small>
+                    <small style="color: var(--bento-muted); font-size: 12px; margin-top: 6px; display: block;">Định dạng: JPG, PNG, WEBP. Tối đa 2MB.</small>
 
                     @error('anh')
                         <div class="invalid-feedback" style="display: block; margin-top: 6px;">{{ $message }}</div>
@@ -260,21 +245,21 @@
             <div class="form-group">
                 <label for="email">Địa chỉ Email (Cố định theo tài khoản)</label>
                 <div style="display: flex; gap: 12px; align-items: center;">
-                    <input type="email" id="email" value="{{ $user->email }}" class="form-control" disabled style="background: #f1f5f9; cursor: not-allowed; color: #64748b;">
+                    <input type="email" id="email" value="{{ $user->email }}" class="form-control" disabled style="background: #f1f5f9; cursor: not-allowed; color: var(--bento-muted);">
                     @if($user->hasVerifiedEmail())
                         <span class="badge badge-speaking" style="white-space: nowrap;">✓ Đã xác minh</span>
                     @else
                         <span class="badge badge-listening" style="white-space: nowrap;">Chưa xác minh</span>
                     @endif
                 </div>
-                <small style="color: #64748b; font-size: 12px; margin-top: 4px; display: block;">Email dùng để nhận liên kết khôi phục mật khẩu và thông báo bài tập.</small>
+                <small style="color: var(--bento-muted); font-size: 12px; margin-top: 4px; display: block;">Email dùng để nhận liên kết khôi phục mật khẩu và thông báo bài tập.</small>
             </div>
 
             <!-- 4. MỤC TIÊU ĐIỂM DET -->
             <div class="form-group">
                 <label for="muctieu">Mục tiêu điểm DET (Thang điểm từ 10 đến 160)</label>
                 <input type="number" id="muctieu" name="muctieu" value="{{ old('muctieu', $user->muctieu) }}" min="10" max="160" step="5" class="form-control" placeholder="Ví dụ: 120">
-                <small style="color: #64748b; font-size: 12px; margin-top: 4px; display: block;">Mục tiêu điểm số giúp hệ thống đề xuất bài tập thích ứng phù hợp cho bạn.</small>
+                <small style="color: var(--bento-muted); font-size: 12px; margin-top: 4px; display: block;">Mục tiêu điểm số giúp hệ thống đề xuất bài tập thích ứng phù hợp cho bạn.</small>
                 @error('muctieu')
                     <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
                 @enderror
@@ -283,13 +268,13 @@
             <!-- ===================================================================== -->
             <!-- 5. PHẦN CÀI LẠI MẬT KHẨU (ĐÃ ĐƯỢC ĐƯA VÀO BÊN TRONG PHẦN CHỈNH SỬA)   -->
             <!-- ===================================================================== -->
-            <div id="inner-password-box" style="margin-top: 28px; padding: 22px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+            <div id="inner-password-box" style="margin-top: 28px; padding: 22px; background: var(--bento-subtle); border-radius: 12px; border: 1px solid var(--bento-line);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: 1px solid var(--bento-line); padding-bottom: 10px;">
                     <div>
-                        <h3 style="font-size: 16px; font-weight: 800; color: #1e293b; margin: 0;">
-                            🔑 Cài lại / Đổi mật khẩu tài khoản
+                        <h3 style="font-size: 16px; font-weight: 800; color: var(--bento-heading); margin: 0;">
+                             Cài lại / Đổi mật khẩu tài khoản
                         </h3>
-                        <p style="color: #64748b; font-size: 12px; margin: 3px 0 0;">
+                        <p style="color: var(--bento-muted); font-size: 12px; margin: 3px 0 0;">
                             Để trống các ô bên dưới nếu bạn không có nhu cầu đổi mật khẩu.
                         </p>
                     </div>
@@ -309,14 +294,14 @@
                                 </svg>
                             </button>
                         </div>
-                        <small style="color: #64748b; font-size: 12px;">Chỉ cần nhập khi bạn muốn thiết lập mật khẩu mới.</small>
+                        <small style="color: var(--bento-muted); font-size: 12px;">Chỉ cần nhập khi bạn muốn thiết lập mật khẩu mới.</small>
                         @error('current_password')
                             <div class="invalid-feedback" style="display: block;">{{ $message }}</div>
                         @enderror
                     </div>
                 @elseif(!empty($user->google_id))
                     <div style="font-size: 13px; color: #0369a1; background: #e0f2fe; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; border: 1px solid #bae6fd;">
-                        ℹ️ Tài khoản của bạn liên kết qua <strong>Google</strong>. Bạn có thể nhập mật khẩu mới bên dưới để tạo mật khẩu đăng nhập trực tiếp (không cần nhập mật khẩu cũ).
+                        Tài khoản của bạn liên kết qua <strong>Google</strong>. Bạn có thể nhập mật khẩu mới bên dưới để tạo mật khẩu đăng nhập trực tiếp (không cần nhập mật khẩu cũ).
                     </div>
                 @endif
 
@@ -353,9 +338,9 @@
             </div>
 
             <!-- HÀNG NÚT HÀNH ĐỘNG -->
-            <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #e2e8f0; display: flex; gap: 12px; align-items: center;">
+            <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--bento-line); display: flex; gap: 12px; align-items: center;">
                 <button type="submit" class="btn btn-primary">
-                    💾 Lưu thay đổi hồ sơ
+                    Lưu thay đổi hồ sơ
                 </button>
                 <button type="button" class="btn btn-outline" onclick="toggleEditMode(false)">
                     ✕ Hủy bỏ
